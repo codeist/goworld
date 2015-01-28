@@ -40,13 +40,22 @@ func (s *Server) Start() {
 		conn, err := l.AcceptTCP()
 		exitIf(err)
 		s.NewConnection(conn)
+		s.NotifyIncoming(conn)
 	}
+}
+
+func (s *Server) Notify(m string) {
+	log.Println(m)
+}
+
+func (s *Server) NotifyIncoming(c *net.TCPConn) {
+	s.Notify(fmt.Sprintf("A player has connected from %s", c.RemoteAddr()))
+	s.Notify(fmt.Sprintf("There are now %d active connections", len(s.Connections)))
 }
 
 func (s *Server) NewConnection(conn *net.TCPConn) *Connection {
 	c := Connection{Player: &world.Player{}, Handle: conn}
 	s.Connections = append(s.Connections, &c)
-	log.Printf("A player has connected from %s", c.Handle.RemoteAddr())
-	log.Printf("There are now %d active connections", len(s.Connections))
+	c.Notify("Welcome to the MUD")
 	return &c
 }
