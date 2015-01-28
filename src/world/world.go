@@ -25,7 +25,10 @@ func NewWorld() *World {
 
 func (w *World) DefaultRoom() *Room {
 	if len(w.Rooms) == 0 {
-		return NewRoom("The void")
+		r := NewRoom("The void")
+		i := NewAdmissionBell(r)
+		r.Items = append(r.Items, i)
+		return r
 	} else {
 		return w.Rooms[0]
 	}

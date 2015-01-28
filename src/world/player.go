@@ -1,9 +1,6 @@
 package world
 
-import (
-	"fmt"
-	"net"
-)
+import "net"
 
 type Player struct {
 	Connection *net.TCPConn
@@ -20,11 +17,11 @@ func NewPlayer(n string, r *Room) *Player {
 func (p *Player) Move(r *Room) {
 	p.Room = r
 	r.Players = append(r.Players, p)
+	p.Look()
 }
 
 func (p *Player) Look() {
-	p.PrintRoomPlayers()
-	p.Room.PrintItems()
+	p.Room.Print(p)
 }
 
 func (p *Player) Notify(m string) {
@@ -36,14 +33,5 @@ func (p *Player) DisplayName() string {
 		return p.Name
 	} else {
 		return "A cloaked figure"
-	}
-}
-
-func (p *Player) PrintRoomPlayers() {
-	slice := p.Room.Players
-	for _, ps := range slice {
-		if ps != p {
-			p.Notify(fmt.Sprintf("%s is here.\n", ps.DisplayName()))
-		}
 	}
 }

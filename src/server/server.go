@@ -57,6 +57,5 @@ func (s *Server) HandleIncoming(conn *net.TCPConn) *world.Player {
 	s.World.Players = append(s.World.Players, &p)
 	s.NotifyIncoming(conn)
 	p.Move(s.World.DefaultRoom())
-	p.Look()
 	return &p
 }

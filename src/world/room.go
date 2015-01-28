@@ -14,14 +14,26 @@ func NewRoom(name string) *Room {
 	return &r
 }
 
-func (r *Room) Print() {
-	fmt.Println(r.Name)
-	r.PrintItems()
+func (r *Room) Print(p *Player) {
+	p.Notify(r.Name + "\n")
+	p.Notify(r.Description + "\n")
+	p.Notify("\n")
+	r.PrintPlayers(p)
+	r.PrintItems(p)
 }
 
-func (r *Room) PrintItems() {
+func (r *Room) PrintPlayers(p *Player) {
+	slice := r.Players
+	for _, ps := range slice {
+		if ps != p {
+			p.Notify(fmt.Sprintf("%s is here.\n", ps.DisplayName()))
+		}
+	}
+}
+
+func (r *Room) PrintItems(p *Player) {
 	slice := r.Items
 	for _, i := range slice {
-		fmt.Println(i.RoomDescription)
+		p.Notify(i.RoomDescription + "\n")
 	}
 }
