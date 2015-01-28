@@ -24,6 +24,9 @@ func NewWorld() *World {
 }
 
 func (w *World) DefaultRoom() *Room {
-	r := NewRoom("The void")
-	return r
+	if len(w.Rooms) == 0 {
+		return NewRoom("The void")
+	} else {
+		return w.Rooms[0]
+	}
 }

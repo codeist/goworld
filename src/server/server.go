@@ -10,10 +10,9 @@ import (
 )
 
 type Server struct {
-	Host        string
-	Port        uint
-	Connections []*Connection
-	Universe    *world.World
+	Host  string
+	Port  uint
+	World *world.World
 }
 
 func exitIf(err error) {
@@ -24,7 +23,7 @@ func exitIf(err error) {
 }
 
 func NewServer(host string, port uint) *Server {
-	s := Server{Host: host, Port: port, Universe: world.NewWorld()}
+	s := Server{Host: host, Port: port, World: world.NewWorld()}
 	return &s
 }
 
@@ -38,10 +37,9 @@ func (s *Server) Start() {
 	log.Printf("The server started and listening on port %d.\n", s.Port)
 
 	for {
-		conn, err := l.AcceptTCP()
+		c, err := l.AcceptTCP()
 		exitIf(err)
-		s.NewConnection(conn)
-		s.NotifyIncoming(conn)
+		s.HandleIncoming(c)
 	}
 }
 
@@ -51,12 +49,14 @@ func (s *Server) Notify(m string) {
 
 func (s *Server) NotifyIncoming(c *net.TCPConn) {
 	s.Notify(fmt.Sprintf("A player has connected from %s", c.RemoteAddr()))
-	s.Notify(fmt.Sprintf("There are now %d active connections", len(s.Connections)))
+	s.Notify(fmt.Sprintf("There are now %d active connections", len(s.World.Players)))
 }
 
-func (s *Server) NewConnection(conn *net.TCPConn) *Connection {
-	c := Connection{Player: &world.Player{}, Handle: conn}
-	s.Connections = append(s.Connections, &c)
-	c.Notify("Welcome to the MUD")
-	return &c
+func (s *Server) HandleIncoming(conn *net.TCPConn) *world.Player {
+	p := world.Player{Connection: conn}
+	s.World.Players = append(s.World.Players, &p)
+	s.NotifyIncoming(conn)
+	p.Move(s.World.DefaultRoom())
+	p.Look()
+	return &p
 }
