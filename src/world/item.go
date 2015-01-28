@@ -1,4 +1,4 @@
-package main
+package world
 
 type Item struct {
 	Name            string

@@ -1,4 +1,4 @@
-package main
+package world
 
 type World struct {
 	p []*Player
