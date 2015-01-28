@@ -6,8 +6,8 @@ import (
 )
 
 type World struct {
-	p []*Player
-	r []*Room
+	Players []*Player
+	Rooms   []*Room
 }
 
 func exitIf(err error) {
@@ -15,4 +15,15 @@ func exitIf(err error) {
 		log.Fatal(err)
 		os.Exit(1)
 	}
+}
+
+func NewWorld() *World {
+	w := World{}
+	w.Rooms = append(w.Rooms, w.DefaultRoom())
+	return &w
+}
+
+func (w *World) DefaultRoom() *Room {
+	r := NewRoom("The void")
+	return r
 }

@@ -13,6 +13,7 @@ type Server struct {
 	Host        string
 	Port        uint
 	Connections []*Connection
+	Universe    *world.World
 }
 
 func exitIf(err error) {
@@ -23,7 +24,7 @@ func exitIf(err error) {
 }
 
 func NewServer(host string, port uint) *Server {
-	s := Server{Host: host, Port: port}
+	s := Server{Host: host, Port: port, Universe: world.NewWorld()}
 	return &s
 }
 
