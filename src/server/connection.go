@@ -1,5 +1,12 @@
 package server
 
+import (
+	"net"
+
+	"github.com/codeist/goworld/src/world"
+)
+
 type Connection struct {
-	Player *Player
+	Player *world.Player
+	Handle *net.TCPConn
 }
