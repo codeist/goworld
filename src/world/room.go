@@ -3,37 +3,37 @@ package world
 import "fmt"
 
 type Room struct {
-	Name        string
-	Description string
+	name        string
+	description string
 	Players     []*Player
 	Items       []*Item
 }
 
 func NewRoom(name string) *Room {
-	r := Room{Name: name}
+	r := Room{name: name}
 	return &r
 }
 
-func (r *Room) Print(p *Player) {
-	p.Notify(r.Name + "\n")
-	p.Notify(r.Description + "\n")
-	p.Notify("\n")
-	r.PrintPlayers(p)
-	r.PrintItems(p)
+func (r *Room) print(p *Player) {
+	p.send(r.name + "\n")
+	p.send(r.description + "\n")
+	p.send("\n")
+	r.printPlayers(p)
+	r.printItems(p)
 }
 
-func (r *Room) PrintPlayers(p *Player) {
+func (r *Room) printPlayers(p *Player) {
 	slice := r.Players
 	for _, ps := range slice {
 		if ps != p {
-			p.Notify(fmt.Sprintf("%s is here.\n", ps.DisplayName()))
+			p.send(fmt.Sprintf("%s is here.\n", ps.displayName()))
 		}
 	}
 }
 
-func (r *Room) PrintItems(p *Player) {
+func (r *Room) printItems(p *Player) {
 	slice := r.Items
 	for _, i := range slice {
-		p.Notify(i.RoomDescription + "\n")
+		p.send(i.roomDescription + "\n")
 	}
 }

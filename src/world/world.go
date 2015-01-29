@@ -19,14 +19,14 @@ func exitIf(err error) {
 
 func NewWorld() *World {
 	w := World{}
-	w.Rooms = append(w.Rooms, w.DefaultRoom())
+	w.Rooms = append(w.Rooms, w.defaultRoom())
 	return &w
 }
 
-func (w *World) DefaultRoom() *Room {
+func (w *World) defaultRoom() *Room {
 	if len(w.Rooms) == 0 {
 		r := NewRoom("The void")
-		i := NewAdmissionBell(r)
+		i := newAdmissionBell(r)
 		r.Items = append(r.Items, i)
 		return r
 	} else {
